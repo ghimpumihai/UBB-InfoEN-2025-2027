@@ -1,0 +1,39 @@
+     1                                  bits 32 ; assembling for 32-bit architecture
+     2                                  global  start
+     3                                  
+     4                                  extern  exit ; declare external exit function (defined in msvcrt.dll)
+     5                                  import  exit msvcrt.dll ; import exit from msvcrt.dll
+     6                                  
+     7                                  segment data use32 class=data ; data segment for variables
+     8 00000000 0200                         a dw 2
+     9 00000002 03000000                     c dd 3
+    10 00000006 01                           b db 1
+    11 00000007 0600000000000000             x dq 6
+    12 0000000F <res 00000004>               r resd 1
+    13                                  segment code use32 class=code ; code segment
+    14                                  start:
+    15 00000000 B800000000                  mov eax,0
+    16 00000005 66A1[00000000]              mov ax,[a]
+    17 0000000B 66F725[00000000]            mul word[a]
+    18 00000012 0205[06000000]              add al,[b]
+    19 00000018 6683D200                    adc dx,0
+    20 0000001C 66A3[0F000000]              mov [r],ax
+    21 00000022 668915[11000000]            mov [r+2],dx
+    22 00000029 BB00000000                  mov ebx,0
+    23 0000002E 8B1D[0F000000]              mov ebx,[r]
+    24 00000034 A1[07000000]                mov eax,[x]
+    25 00000039 8B15[0B000000]              mov edx,[x+4]
+    26 0000003F 01D8                        add eax,ebx
+    27 00000041 83D200                      adc edx,0
+    28 00000044 BB00000000                  mov ebx,0
+    29 00000049 8A1D[06000000]              mov bl,[b]
+    30 0000004F 021D[06000000]              add bl,[b]
+    31 00000055 F7F3                        div ebx
+    32 00000057 89C3                        mov ebx,eax
+    33 00000059 B800000000                  mov eax,0
+    34 0000005E A1[02000000]                mov eax,[c]
+    35 00000063 F725[02000000]              mul dword[c]
+    36 00000069 01D8                        add eax,ebx
+    37 0000006B 83D200                      adc edx,0
+    38 0000006E FF15[00000000]              call [exit]
+    39                                     ;(a*a+b+x)/(b+b)+c*c

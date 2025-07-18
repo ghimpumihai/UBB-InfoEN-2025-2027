@@ -1,0 +1,48 @@
+     1                                  bits 32 ; assembling for 32-bit architecture
+     2                                  global  start
+     3                                  
+     4                                  extern  exit ; declare external exit function (defined in msvcrt.dll)
+     5                                  import  exit msvcrt.dll ; import exit from msvcrt.dll
+     6                                  
+     7                                  segment data use32 class=data ; data segment for variables
+     8 00000000 0200                         a dw 2
+     9 00000002 03000000                     c dd 3
+    10 00000006 01                           b db 1
+    11 00000007 0600000000000000             x dq 6
+    12 0000000F <res 00000004>               r resd 1
+    13                                  segment code use32 class=code ; code segment
+    14                                  start:
+    15 00000000 66A1[00000000]              mov ax,[a]
+    16 00000006 66F72D[00000000]            imul word[a]
+    17                                      ;a*a:dx:ax
+    18 0000000D 66A3[0F000000]              mov [r],ax
+    19 00000013 668915[11000000]            mov [r+2],dx
+    20 0000001A A0[06000000]                mov al,[b]
+    21 0000001F 6698                        cbw
+    22 00000021 98                          cwde
+    23 00000022 8B1D[0F000000]              mov ebx,[r]
+    24 00000028 01D8                        add eax,ebx
+    25                                      ;(a*a+b)
+    26 0000002A 99                          cdq
+    27 0000002B 8B1D[07000000]              mov ebx,[x]
+    28 00000031 8B0D[0B000000]              mov ecx,[x+4]
+    29 00000037 01C3                        add ebx,eax
+    30 00000039 83D100                      adc ecx,0
+    31                                      ;(a*a+b+x) salvat in ecx:ebx
+    32 0000003C A0[06000000]                mov al,[b]
+    33 00000041 0205[06000000]              add al,[b]
+    34 00000047 6698                        cbw
+    35 00000049 98                          cwde
+    36 0000004A A3[0F000000]                mov [r],eax
+    37 0000004F 89D8                        mov eax,ebx
+    38 00000051 89CA                        mov edx,ecx
+    39 00000053 F735[0F000000]              div dword[r]
+    40                                      ;(a*a+b+x)/(b+b) salvat in eax-catul edx-restul
+    41 00000059 89C3                        mov ebx,eax
+    42 0000005B A1[02000000]                mov eax,[c]
+    43 00000060 F72D[02000000]              imul dword[c]
+    44                                      ;c*c edx:eax
+    45 00000066 01D8                        add eax,ebx
+    46 00000068 83D200                      adc edx,0
+    47 0000006B FF15[00000000]              call [exit]
+    48                                     ;(a*a+b+x)/(b+b)+c*c

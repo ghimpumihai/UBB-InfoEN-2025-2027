@@ -1,0 +1,28 @@
+     1                                  bits 32 ; assembling for 32-bit architecture
+     2                                  global  start
+     3                                  
+     4                                  extern  exit ; declare external exit function (defined in msvcrt.dll)
+     5                                  import  exit msvcrt.dll ; import exit from msvcrt.dll
+     6                                  
+     7                                  segment data use32 class=data ; data segment for variables
+     8 00000000 5704                         a dw 1111
+     9 00000002 AE08                         b dw 2222
+    10 00000004 05                           c db 5
+    11 00000005 0A                           d db 10
+    12 00000006 44332211                     e dd 11_22_33_44h
+    13 0000000A 8877665544332211             x dq 11_22_33_44_55_66_77_88h
+    14                                  
+    15                                  segment code use32 class=code ; code segment
+    16                                  start:
+    17 00000000 668B15[00000000]           mov dx,[a]
+    18                                     
+    19                                     ;1/a= cat:ax rest:dx cum plm se face
+    20                                     
+    21 00000007 66A1[02000000]             mov ax,[b]
+    22                                     mul 200
+    22          ******************       error: invalid combination of opcode and operands
+    23                                     
+    24                                     
+    25                                     ;1/a+200*b-c/(d+1)+x/a-e
+    26                                  
+    27                                  

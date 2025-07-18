@@ -1,0 +1,33 @@
+     1                                  bits 32
+     2                                  global start
+     3                                  extern exit
+     4                                  import exit msvcrt.dll
+     5                                  
+     6                                  segment data use32 class=data
+     7 00000000 5C89E5                      s db 01011100b, 10001001b, 11100101b
+     8                                      lens equ $-s
+     9 00000003 0000<rept>                  d times lens dw 0
+    10                                  
+    11                                  segment code use32 class=code
+    12                                  start:
+    13 00000000 B903000000                  mov ecx, lens      
+    14 00000005 BE[00000000]                mov esi, s          
+    15 0000000A BF[03000000]                mov edi, d          
+    16                                  
+    17                                  repeta:
+    18 0000000F AC                          lodsb               
+    19 00000010 B308                        mov bl, 8          
+    20 00000012 30E4                        xor ah, ah         
+    21                                  
+    22                                  oglindire:
+    23 00000014 D0E0                        shl al, 1           
+    24 00000016 D0DC                        rcr ah, 1           
+    25 00000018 FECB                        dec bl              
+    26 0000001A 75F8                        jnz oglindire       
+    27                                      
+    28 0000001C 8827                        mov [edi], ah      
+    29 0000001E 47                          inc edi             
+    30 0000001F E2EE                    loop repeta             
+    31                                  
+    32 00000021 E8(00000000)                call exit          
+    33                                  ;Se da un sir de octeti. Sa se obtina sirul oglindit al reprezentarii binare a acestui sir de octesi.

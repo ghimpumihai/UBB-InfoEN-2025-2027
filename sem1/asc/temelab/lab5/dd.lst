@@ -1,0 +1,18 @@
+     1                                  bits 32  ; assembling for 32-bit architecture
+     2                                  global start
+     3                                  
+     4                                  extern exit ; declare external exit function (from msvcrt.dll)
+     5                                  import exit msvcrt.dll ; import exit function from msvcrt.dll
+     6                                  
+     7                                  segment data use32 class=data ; data segment for variables
+     8 00000000 2B34326138345835        S1 db '+', '4', '2', 'a', '8', '4', 'X', '5' 
+     9                                  len1 equ $-S1                                
+    10 00000008 613435                  S2 db 'a', '4', '5'                          
+    11                                  len2 equ $-S2                                
+    12 0000000B 00<rept>                D times len1 db 0                           
+    13                                  
+    14                                  segment code use32 class=code ; code segment for code
+    15                                  start:
+    16 00000000 B800000000                  mov eax,0
+    17 00000005 B001                        mov al,1
+    18 00000007 B402                        mov ah,2

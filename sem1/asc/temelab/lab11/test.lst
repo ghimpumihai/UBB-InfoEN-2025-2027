@@ -1,0 +1,17 @@
+     1                                  bits 32 
+     2                                  
+     3                                  global start        
+     4                                  
+     5                                  extern exit, printf, scanf            
+     6                                  import exit msvcrt.dll   
+     7                                  import printf msvcrt.dll
+     8                                  import scanf msvcrt.dll
+     9                                  
+    10                                  segment data use32 class=data
+    11 00000000 0102030A141E               a db 1,2,3,10,20,30
+    12                                  segment code use32 class=code
+    13                                      start:
+    14 00000000 66B8FEFF                       mov ax,-2
+    15 00000004 B380                           mov bl,-128
+    16 00000006 F6EB                           imul bl
+    17 00000008 E8(00000000)                   call exit

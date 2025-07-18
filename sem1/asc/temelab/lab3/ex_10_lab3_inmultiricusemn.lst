@@ -1,0 +1,41 @@
+     1                                  bits 32 ; assembling for 32-bit architecture
+     2                                  global  start
+     3                                  
+     4                                  extern  exit ; declare external exit function (defined in msvcrt.dll)
+     5                                  import  exit msvcrt.dll ; import exit from msvcrt.dll
+     6                                  
+     7                                  segment data use32 class=data ; data segment for variables
+     8 00000000 02                           a db 2
+     9 00000001 03                           c db 3
+    10 00000002 0100                         b dw 1
+    11 00000004 14000000                     d dd 20
+    12 00000008 0600000000000000             x dq 6
+    13 00000010 <res 00000004>               r resd 1
+    14                                  segment code use32 class=code ; code segment
+    15                                  start:
+    16 00000000 B800000000                  mov eax,0
+    17 00000005 A0[00000000]                mov al,[a]
+    18 0000000A 6698                        cbw
+    19                                      ;convertire byte word
+    20 0000000C 66F72D[02000000]            imul word[b]
+    21 00000013 66A3[10000000]              mov [r],ax
+    22 00000019 668915[12000000]            mov [r+2],dx
+    23 00000020 A1[10000000]                mov eax,[r]
+    24 00000025 66BB0700                    mov bx,7
+    25 00000029 6629C3                      sub bx,ax
+    26 0000002C 021D[01000000]              add bl,[c]
+    27 00000032 6689D8                      mov ax,bx
+    28 00000035 F63D[00000000]              idiv byte[a]
+    29 0000003B 8B1D[04000000]              mov ebx,[d]
+    30 00000041 29C3                        sub ebx,eax
+    31 00000043 83EB06                      sub ebx,6
+    32 00000046 89D8                        mov eax,ebx
+    33 00000048 99                          cdq
+    34 00000049 89C3                        mov ebx,eax
+    35 0000004B A1[08000000]                mov eax,[x]
+    36 00000050 8B15[0C000000]              mov edx,[x+4]
+    37 00000056 B902000000                  mov ecx,2
+    38 0000005B F7F9                        idiv ecx
+    39 0000005D 01C3                        add ebx,eax
+    40 0000005F E8(00000000)                call exit
+    41                                      ;d-(7-a*b+c)/a-6+x/2

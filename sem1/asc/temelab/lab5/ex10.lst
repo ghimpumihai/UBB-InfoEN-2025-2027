@@ -1,0 +1,40 @@
+     1                                  bits 32 ; assembling for 32-bit architecture
+     2                                  global start
+     3                                  
+     4                                  extern exit ; declare external exit function (defined in msvcrt.dll)
+     5                                  import exit msvcrt.dll ; import exit from msvcrt.dll
+     6                                  
+     7                                  
+     8                                  segment data use32 class=data ; data segment for variables
+     9 00000000 2B31326238365838        S1 db '+', '1', '2', 'b', '8', '6', 'X', '8'
+    10                                  len1 equ $-S1
+    11 00000008 3435                    S2 db '4','5'
+    12                                  len2 equ $-S2
+    13 0000000A 00<rept>                D times len1/2+len2 db 0
+    14                                  segment code use32 class=code ; code segment
+    15                                  
+    16                                  start:
+    17 00000000 B902000000                  mov ecx,len2 ; set loop counter for S2
+    18 00000005 BE00000000                  mov esi,0 ; index for S2
+    19                                      repeta1:
+    20 0000000A E310                            jecxz sfarsit1 ; if ecx=0 jump to label
+    21 0000000C 8A81[07000000]                  mov al,[S2+ecx-1] ; take the last element from S2
+    22 00000012 8886[0A000000]                  mov [D+esi],al ; move the element in D
+    23 00000018 46                              inc esi ; increase index
+    24 00000019 49                              dec ecx ; decrease loop counter
+    25 0000001A 75EE                            jnz repeta1; jump back to label if ecx!=0
+    26                                      sfarsit1:
+    27                                      
+    28 0000001C B904000000                  mov ecx,len1/2 ; set loop counter for S1
+    29 00000021 BE00000000                  mov esi,0 ; index for S1
+    30                                      repeta2:
+    31 00000026 E312                            jecxz sfarsit2 ; if ecx=0 jump to label
+    32 00000028 8A86[01000000]                  mov al,[S1+esi+1] ; take the elements from the even positions
+    33 0000002E 8886[0B000000]                  mov [D+esi+len2-1],al ; move the element in D
+    34 00000034 83C602                          add esi,2; increase index
+    35 00000037 49                              dec ecx ; decrease loop counter
+    36 00000038 75EC                            jnz repeta2; jump back to label if ecx!=0
+    37                                      sfarsit2:
+    38 0000003A E8(00000000)                call exit
+    39                                  ;Se dau doua siruri de caractere S1 si S2. Sa se construiasca sirul D prin concatenarea elementelor sirului S2 in ordine inversa cu elementele de pe pozitiile pare din sirul S1.
+    40                                  

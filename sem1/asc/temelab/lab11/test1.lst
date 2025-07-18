@@ -1,0 +1,17 @@
+     1                                  bits 32 
+     2                                  
+     3                                  global start        
+     4                                  
+     5                                  extern exit, printf, scanf            
+     6                                  import exit msvcrt.dll   
+     7                                  import printf msvcrt.dll
+     8                                  import scanf msvcrt.dll
+     9                                  
+    10                                  segment data use32 class=data
+    11                                  segment code use32 class=code
+    12                                      start:
+    13 00000000 66B85802                       mov ax,600
+    14 00000004 98                             cwde
+    15 00000005 66B9FEFF                       mov cx,-2
+    16 00000009 66F7F9                         idiv cx
+    17 0000000C E8(00000000)                   call exit

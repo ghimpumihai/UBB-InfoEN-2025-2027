@@ -1,0 +1,21 @@
+     1                                  bits 32 ;asamblare si compilare pentru arhitectura de 32 biti
+     2                                  
+     3                                  global  start 
+     4                                  
+     5                                  ; declararea functiilor externe folosite de program
+     6                                  extern exit     
+     7                                  import exit msvcrt.dll    
+     8                                  
+     9                                  segment  data use32 class=data
+    10                                      
+    11                                     
+    12                                  segment  code use32 class=code ; segmentul de cod
+    13                                      start:
+    14 00000000 B8FFFFFFFF                      mov eax,-1
+    15 00000005 BBFEFFFFFF                      mov ebx,-2
+    16 0000000A F7EB                            imul ebx
+    17                                         
+    18                                              
+    19                                          final:
+    20 0000000C 6A00                                push dword 0
+    21 0000000E FF15[00000000]                      call [exit]

@@ -1,0 +1,33 @@
+     1                                  bits 32 
+     2                                  
+     3                                  global start        
+     4                                  
+     5                                  extern exit, printf, scanf            
+     6                                  import exit msvcrt.dll   
+     7                                  import printf msvcrt.dll
+     8                                  import scanf msvcrt.dll
+     9                                  
+    10                                  segment data use32 class=data
+    11 00000000 00000000                    n dd  0; In this variable we'll store the value rode from the keyboard
+    12 00000004 6E3D00                      message db "n=", 0; 
+    13 00000007 256400                      format_10 db "%d", 0;
+    14 0000000A 257800                      format_16 db "%x", 0;
+    15                                  
+    16                                  segment code use32 class=code
+    17                                      start:
+    18 00000000 68[04000000]                    push dword message; on the stack we'll put the adress of the string
+    19 00000005 FF15[00000000]                  call [printf]; we call the function printf 
+    20 0000000B 83C404                          add esp, 4*1; we free the stack
+    21                                          
+    22 0000000E 68[00000000]                    push dword n; here we have the adress of n
+    23 00000013 68[07000000]                    push dword format_10; 
+    24 00000018 FF15[00000000]                  call [scanf]; we call the scanf for reading
+    25 0000001E 83C408                          add esp, 4*2; we free the stack
+    26                                          
+    27 00000021 FF35[00000000]                  push dword [n]; here we have the value of n
+    28 00000027 68[0A000000]                    push dword format_16; the format in which we want to print our variable(base 16)
+    29 0000002C FF15[00000000]                  call [printf]; we call the printf function
+    30 00000032 83C408                          add esp, 4*2; here we free the stack
+    31                                          ; exit(0)
+    32 00000035 6A00                            push    dword 0      ; push the parameter for exit onto the stack
+    33 00000037 FF15[00000000]                  call    [exit]       ; call exit to terminate the program

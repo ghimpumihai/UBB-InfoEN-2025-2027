@@ -1,0 +1,52 @@
+     1                                  bits 32 ; assembling for 32-bit architecture
+     2                                  global start
+     3                                  
+     4                                  extern exit ; declare external exit function (from msvcrt.dll)
+     5                                  import exit msvcrt.dll
+     6                                  segment data use32 class=data ; data segment for variables
+     7 00000000 2B34326138345835        S1 db '+', '4', '2', 'a', '8', '4', 'X', '5' 
+     8                                  len1 equ $-S1                               
+     9 00000008 613435                  S2 db 'a', '4', '5'                          
+    10                                  len2 equ $-S2                                
+    11 0000000B 00<rept>                D times len1 db 0                            
+    12                                  
+    13                                  segment code use32 class=code ; code segment for code
+    14                                  start:
+    15 00000000 BB00000000                  mov ebx, 0 ; set ebx to 0
+    16 00000005 BE00000000                  mov esi, 0 ; index for S1
+    17 0000000A BF00000000                  mov edi, 0 ; index for D
+    18 0000000F B908000000                  mov ecx, len1 ; set loop counter for S1
+    19                                  
+    20                                      repeta1:
+    21 00000014 E333                            jecxz sfarsit1 ; if ecx=0, end loop                          
+    22 00000016 8A86[00000000]                  mov al, [S1+esi] ; load current character from S1
+    23 0000001C B700                            mov bh,0 ; reset index for S2
+    24 0000001E B300                            mov bl,0 ; "found" flag set to 0 initially
+    25                                  
+    26                                      repeta2:
+    27 00000020 80FF03                          cmp bh,len2 ; check if we have checked all of S2
+    28 00000023 7414                            je add_to_D ; if S2 has been checked, add to D if not found
+    29 00000025 89DA                            mov edx,ebx
+    30 00000027 8AA2[08000000]                  mov ah,[S2+edx] ; load current character from S2 into ah
+    31 0000002D 38E0                            cmp al,ah ; compare S1 character with S2 character
+    32 0000002F 7504                            jne next_in_S2 ; if not equal, check the next character in S2
+    33 00000031 B301                            mov bl,1 ; set "found" flag to 1 if a match is found
+    34 00000033 EB10                            jmp skip ; skip adding to D if match found
+    35                                  
+    36                                      next_in_S2:
+    37 00000035 FEC7                            inc bh ; move to next character in S2
+    38 00000037 EBE7                            jmp repeta2 ; repeat inner loop for S2
+    39                                  
+    40                                      add_to_D:
+    41 00000039 80FB01                          cmp bl,1 ; check if the character was found in S2
+    42 0000003C 7407                            je skip ; if found, skip adding to D
+    43 0000003E 8887[0B000000]                  mov [D+edi],al ; store character in D if not found
+    44 00000044 47                              inc edi ; increment D index
+    45                                  
+    46                                      skip:
+    47 00000045 46                              inc esi ; move to next character in S1
+    48 00000046 49                              dec ecx ; decrement outer loop counter
+    49 00000047 75CB                            jnz repeta1 ; repeat outer loop for S1
+    50                                  
+    51                                      sfarsit1:
+    52 00000049 E8(00000000)                    call exit

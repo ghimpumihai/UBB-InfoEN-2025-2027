@@ -1,0 +1,22 @@
+     1                                  bits 32 ; assembling for 32-bit architecture
+     2                                  global  start
+     3                                  
+     4                                  extern  exit ; declare external exit function (defined in msvcrt.dll)
+     5                                  import  exit msvcrt.dll ; import exit from msvcrt.dll
+     6                                  
+     7                                  segment data use32 class=data ; data segment for variables
+     8 00000000 09                          a db 9
+     9 00000001 07                          b db 7
+    10 00000002 0A                          c db 10
+    11 00000003 14                          d db 20
+    12                                  
+    13                                  segment code use32 class=code ; code segment
+    14                                  start:
+    15 00000000 A0[00000000]                mov AL, [a]     
+    16 00000005 0205[03000000]              add AL, [d]
+    17 0000000B 0205[03000000]              add AL, [d]
+    18 00000011 8A15[01000000]              mov DL, [b]
+    19 00000017 0215[01000000]              add DL, [b]
+    20 0000001D 2A05[02000000]              sub AL, [c]
+    21 00000023 00D0                        add AL,DL
+    22 00000025 E8(00000000)                call exit       

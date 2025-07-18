@@ -1,0 +1,10 @@
+     1                                  bits 32
+     2                                  global start
+     3                                  extern scanf,printf,bla
+     4                                  import scanf msvcrt.dll
+     5                                  import printf msvcrt.dll
+     6                                  
+     7                                  segment data use32 class=data
+     8                                  
+     9                                  segment code use32 class=code
+    10                                  start:

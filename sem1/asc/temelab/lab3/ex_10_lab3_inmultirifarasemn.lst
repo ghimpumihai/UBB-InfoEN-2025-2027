@@ -1,0 +1,37 @@
+     1                                  bits 32 ; assembling for 32-bit architecture
+     2                                  global  start
+     3                                  
+     4                                  extern  exit ; declare external exit function (defined in msvcrt.dll)
+     5                                  import  exit msvcrt.dll ; import exit from msvcrt.dll
+     6                                  
+     7                                  segment data use32 class=data ; data segment for variables
+     8 00000000 02                           a db 2
+     9 00000001 03                           c db 3
+    10 00000002 0100                         b dw 1
+    11 00000004 14000000                     d dd 20
+    12 00000008 0600000000000000             x dq 6
+    13 00000010 <res 00000004>               r resd 1
+    14                                  segment code use32 class=code ; code segment
+    15                                  start:
+    16 00000000 B800000000                  mov eax,0
+    17 00000005 A0[00000000]                mov al,[a]
+    18 0000000A 66F725[02000000]            mul word[b]
+    19                                      ;rezultatul ajunge pe dx:ax
+    20 00000011 66A3[10000000]              mov [r],ax
+    21 00000017 668915[12000000]            mov [r+2],dx
+    22 0000001E A1[10000000]                mov eax,[r]
+    23 00000023 66BB0700                    mov bx,7
+    24 00000027 6629C3                      sub bx,ax
+    25 0000002A 021D[01000000]              add bl,[c]
+    26 00000030 6689D8                      mov ax,bx
+    27 00000033 F635[00000000]              div byte[a]
+    28 00000039 8B1D[04000000]              mov ebx,[d]
+    29 0000003F 29C3                        sub ebx,eax
+    30 00000041 83EB06                      sub ebx,6
+    31 00000044 A1[08000000]                mov eax,[x]
+    32 00000049 8B15[0C000000]              mov edx,[x+4]
+    33 0000004F B902000000                  mov ecx,2
+    34 00000054 F7F1                        div ecx
+    35 00000056 01C3                        add ebx,eax
+    36 00000058 E8(00000000)                call exit
+    37                                      ;d-(7-a*b+c)/a-6+x/2

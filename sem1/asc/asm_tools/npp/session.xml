@@ -1,0 +1,9 @@
+<NotepadPlus>
+    <Session activeView="0">
+        <mainView activeIndex="1">
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="978" endPos="978" selMode="0" lang="Assembly" encoding="-1" filename="C:\Users\ghste\Desktop\asm_tools\nasm\new 1.asm" backupFilePath="" originalFileLastModifTimestamp="1738775042" mapFirstVisibleDisplayLine="-1" mapFirstVisibleDocLine="-1" mapLastVisibleDocLine="-1" mapNbLine="-1" mapHigherPos="-1" mapWidth="-1" mapHeight="-1" mapKByteInDoc="3538994" mapWrapIndentMode="-1" mapIsWrap="no" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1958" startPos="0" endPos="0" selMode="0" lang="Assembly" encoding="-1" filename="C:\Users\ghste\Desktop\ubb\asc\Subiecte Sesiune\rezolvare 1\test.asm" backupFilePath="" originalFileLastModifTimestamp="1705859191" mapFirstVisibleDisplayLine="-1" mapFirstVisibleDocLine="-1" mapLastVisibleDocLine="-1" mapNbLine="-1" mapHigherPos="-1" mapWidth="-1" mapHeight="-1" mapKByteInDoc="0" mapWrapIndentMode="-1" mapIsWrap="no" />
+        </mainView>
+        <subView activeIndex="0" />
+    </Session>
+</NotepadPlus>

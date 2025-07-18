@@ -1,0 +1,63 @@
+     1                                  bits 32 
+     2                                  
+     3                                  global start        
+     4                                  
+     5                                  extern exit, fread, printf, fopen 
+     6                                  import exit msvcrt.dll    
+     7                                  
+     8                                  import fread msvcrt.dll
+     9                                  import printf msvcrt.dll
+    10                                  import fopen msvcrt.dll
+    11                                  
+    12                                  segment data use32 class=data
+    13 00000000 6165696F754145494F-         vowels db "aeiouAEIOU", 0
+    13 00000009 5500               
+    14                                      len equ $ - vowels 
+    15 0000000B 312E74787400                file_name db "1.txt", 0
+    16 00000011 7200000000000000            access_mode dd "r", 0
+    17 00000019 FFFFFFFF                    file_descriptor dd -1
+    18 0000001D 6E756D626572206F66-         format db "number of vowels is : %d", 0
+    18 00000026 20766F77656C732069-
+    18 0000002F 73203A20256400     
+    19 00000036 00                          char db 0
+    20                                  segment code use32 class=code
+    21                                  start:
+    22 00000000 68[11000000]                push dword access_mode
+    23 00000005 68[0B000000]                push file_name
+    24 0000000A FF15[00000000]              call [fopen]
+    25 00000010 83C408                      add esp, 4 * 2
+    26                                      
+    27 00000013 BB00000000                  mov ebx, 0
+    28                                      
+    29 00000018 A3[19000000]                mov dword [file_descriptor], eax 
+    30 0000001D 83F800                      cmp eax, 0
+    31 00000020 7449                        je final
+    32                                  read_chars:
+    33 00000022 FF35[19000000]              push dword [file_descriptor];adresa sirului de elemente
+    34 00000028 6A01                        push dword 1; numarul de elemente citite
+    35 0000002A 6A01                        push dword 1; marimea unui element citit
+    36 0000002C 68[36000000]                push dword char; ; adresa unde se salveaza datele
+    37 00000031 FF15[00000000]              call [fread]
+    38 00000037 83C410                      add esp,4*4; curatarea stivei
+    39                                      
+    40 0000003A 83F800                      cmp eax,0
+    41 0000003D 741D                        je print_result
+    42                                      
+    43 0000003F BE[00000000]                mov esi,vowels
+    44 00000044 B90B000000                  mov ecx,len
+    45                                      
+    46                                      start_loop:
+    47 00000049 8A440EFF                        mov al,byte[esi+ecx-1]
+    48 0000004D 3A05[36000000]                  cmp al,byte[char]
+    49 00000053 7503                            jnz step_up
+    50 00000055 83C301                          add ebx,1
+    51                                          step_up:
+    52 00000058 E2EF                            loop start_loop
+    53 0000005A EBC6                            jmp read_chars
+    54                                      print_result:
+    55 0000005C 53                              push ebx
+    56 0000005D 68[1D000000]                    push dword format
+    57 00000062 FF15[00000000]                  call [printf]
+    58 00000068 83C408                          add esp,4*2
+    59                                      final:
+    60 0000006B FF15[00000000]                  call [exit]
